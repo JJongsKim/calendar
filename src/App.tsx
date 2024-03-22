@@ -12,8 +12,6 @@ function App() {
   const [selectedDay, setSelectedDay] = useState<number[]>([]);
   const daySet = useRef(new Set<number>());
 
-  console.log(selectedDay);
-
   const handleClickDay = useCallback(
     (id: number) => {
       daySet.current.has(id)
@@ -51,6 +49,12 @@ function App() {
                 className="dayButton"
                 type="button"
                 onClick={() => handleClickDay(el.id)}
+                disabled={el.remainingSeats === 0}
+                style={{
+                  borderColor: selectedDay.some((day) => day === el.id)
+                    ? `orange`
+                    : `gray`,
+                }}
               >
                 {el.day}
               </button>

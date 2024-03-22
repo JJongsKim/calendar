@@ -9,6 +9,28 @@ function App() {
     currentYear: 0,
     currentMonth: 0,
   });
+  const { currentYear, currentMonth } = yearMonth;
+
+  let firstOfDay = 0;
+  let days = [];
+
+  if (currentYear !== 0 && currentMonth !== 0) {
+    firstOfDay = new Date(currentYear, currentMonth - 1, 1).getDay();
+    for (let i = 0; i < mock.length; i++) {
+      const numOfWeekday = new Date(
+        currentYear,
+        currentMonth - 1,
+        mock[i].day
+      ).getDay();
+      if (numOfWeekday !== 0 && numOfWeekday !== 6) {
+        // 일요일(0)과 토요일(6) 제외
+        days.push(mock[i]);
+      }
+    }
+  }
+
+  const nullDays = Array.from({ length: firstOfDay - 1 }).fill(null);
+
   const [selectedDay, setSelectedDay] = useState<number[]>([]);
   const daySet = useRef(new Set<number>());
 
@@ -32,7 +54,7 @@ function App() {
   return (
     <div className="App">
       <p>
-        {yearMonth.currentYear}년 {yearMonth.currentMonth}월
+        {currentYear}년 {currentMonth}월
       </p>
       <main className="mainWrap">
         <ul className="dayWrap">
@@ -43,7 +65,10 @@ function App() {
           <li>금</li>
         </ul>
         <div className="calenderWrap">
-          {mock.map((el) => (
+          {nullDays.map((_, index) => (
+            <div key={index} />
+          ))}
+          {days.map((el) => (
             <div key={el.id} className="dayButtonWrap">
               <button
                 className="dayButton"
